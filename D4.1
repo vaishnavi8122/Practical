@@ -1,0 +1,45 @@
+def printSolution(board):
+    for i in range(len(board)):
+        for j in range(len(board)):
+            if board[i][j]:
+                print("Q", end=" ")
+            else:
+                print("_", end=" ")
+        print("\n")
+
+def isSafe(board, row, col):
+    for i in range(col):
+        if board[row][i]:
+            return False
+    
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+    
+    for i, j in zip(range(row, len(board), 1), range(col, -1, -1)):
+        if board[i][j]:
+            return False
+    
+    return True
+
+def solveNQueen(board, col):
+    if col >= len(board):
+        printSolution(board)
+        return True
+
+    res = False
+    for i in range(len(board)):
+        if isSafe(board, i, col):
+            board[i][col] = 1
+
+            res = solveNQueen(board, col + 1) or res
+
+            board[i][col] = 0
+
+    return res
+
+n = int(input("Enter the size of the board: "))
+board = [[0 for _ in range(n)] for _ in range(n)]
+
+if not solveNQueen(board, 0):
+    print("No solution exists.")
